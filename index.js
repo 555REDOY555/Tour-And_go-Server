@@ -23,6 +23,7 @@ async function run() {
           console.log("data base connect successfuly ")
           const database = client.db("Assignment-11");
           const servisesCollection = database.collection("Servises");
+          const orderCollection = database.collection("order")
 
           //GEI API
           app.get('/servises', async (req, res) => {
@@ -31,6 +32,24 @@ async function run() {
                res.send(products)
           });
 
+
+
+          // POST api to get kyes \
+
+
+          app.post('/servises/bykeys', async (req, res) => {
+               // console.log(req.body)
+               const keys = req.body
+               const query = { key: { $in: keys } }
+               const products = await productsCllection.find(query).toArray()
+               res.json(products)
+          })
+
+          app.post('/order', async (req, res) => {
+               const order = req.body
+               const result = await orderCollection.insertOne(order)
+               res.json(result)
+          })
 
 
      }
