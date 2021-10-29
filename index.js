@@ -25,7 +25,7 @@ async function run() {
           // console.log("hi db")
           const database = client.db("Assignment-11");
           const serviseCllection = database.collection("Servises");
-          const orderCollection = database.collection("Order")
+          const orderCollection = database.collection("order")
 
 
 
@@ -44,8 +44,8 @@ async function run() {
                const id = req.params.id;
                console.log('getting specific service', id);
                const query = { _id: ObjectId(id) };
-               const service = await serviseCllection.findOne(query);
-               res.json(service);
+               const services = await serviseCllection.findOne(query);
+               res.json(services);
           })
 
           // POST API 
@@ -90,7 +90,7 @@ async function run() {
 
 
           //get my order 
-          app.get('/Order/:email', async (req, res) => {
+          app.get('/order/:email', async (req, res) => {
                console.log(req.params.email);
                const order = await orderCollection.find({ email: req.params.email }).toArray()
                res.send(order);
@@ -98,11 +98,11 @@ async function run() {
 
           // DELETE API
 
-          app.delete('/delete/:id', async (req, res) => {
+          app.delete('/Servises/:id', async (req, res) => {
                const id = req.params.id;
                const query = { _id: ObjectId(id) };
 
-               const result = await orderCollection.deleteOne(query);
+               const result = await serviseCllection.deleteOne(query);
 
                console.log('deleting user with id ', result);
 
