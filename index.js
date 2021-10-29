@@ -25,7 +25,7 @@ async function run() {
           // console.log("hi db")
           const database = client.db("Assignment-11");
           const serviseCllection = database.collection("Servises");
-          const orderCollection = database.collection("order")
+          const orderCollection = database.collection("Order")
 
 
 
@@ -49,18 +49,18 @@ async function run() {
           })
 
           // POST API 
-          app.post('/Services', async (req, res) => {
-               const service = req.body;
-               console.log('hit the post api', service);
+          app.post('/Servises', async (req, res) => {
+               const Service = req.body;
+               console.log('hit the post api', Service);
 
-               const result = await serviseCllection.insertOne(service);
+               const result = await serviseCllection.insertOne(Service);
                console.log(result);
                res.json(result)
           });
 
 
           //add order 
-          app.post('/order', (req, res) => {
+          app.post('/Order', (req, res) => {
                // const order = req.body
 
                orderCollection.insertOne(req.body).then((result, err) => {
@@ -75,10 +75,22 @@ async function run() {
 
 
           })
+          // app.post('/order/:id', (req, res) => {
+          //      // const order = req.body
+
+          //      const id = req.params.id;
+          //      console.log('getting specific service', id);
+          //      const query = { _id: ObjectId(id) };
+          //      const order = await orderCollection.insertOne(query);
+          //      res.json(order);
+
+
+
+          // })
 
 
           //get my order 
-          app.get('/MyOrder/:email', async (req, res) => {
+          app.get('/Order/:email', async (req, res) => {
                console.log(req.params.email);
                const order = await orderCollection.find({ email: req.params.email }).toArray()
                res.send(order);
