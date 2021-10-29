@@ -72,8 +72,14 @@ async function run() {
           //add order 
           app.post('/order', (req, res) => {
                // const order = req.body
-               orderCollection.insertOne(req.body).then(result => {
-                    console.log(result)
+
+               orderCollection.insertOne(req.body).then((result, err) => {
+                    if (err) {
+                         res.send(err)
+                    }
+                    else {
+                         res.send(result)
+                    }
                })
 
 
@@ -86,6 +92,19 @@ async function run() {
                console.log(req.params.email);
                const order = await orderCollection.find({ email: req.params.email }).toArray()
                res.send(order);
+          })
+
+          // DELETE API
+
+          app.delete('/delete/:id', async (req, res) => {
+               const id = req.params.id;
+               const query = { _id: ObjectId(id) };
+
+               const result = await orderCollection.deleteOne(query);
+
+               console.log('deleting user with id ', result);
+
+               res.json(result);
           })
      }
      finally {
