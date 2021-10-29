@@ -39,7 +39,7 @@ async function run() {
           })
 
 
-          // GET Single Service
+          // GET Single Service   no
           app.get('/Servises/:id', async (req, res) => {
                const id = req.params.id;
                console.log('getting specific service', id);
