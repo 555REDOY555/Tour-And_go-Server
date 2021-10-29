@@ -1,22 +1,18 @@
-const exprees = require("express");
-
+const express = require('express');
 const { MongoClient } = require('mongodb');
+const ObjectId = require('mongodb').ObjectId;
 
-const ObjectId = require("mongodb").ObjectId
+const cors = require('cors');
+require('dotenv').config();
 
-const cors = require("cors")
+const app = express();
+const port = process.env.PORT || 5000;
 
-require('dotenv').config()
-
-const app = exprees();
-
-const port = process.env.PORT || 7000;;
-
-
-// cors
-
+// middleware
 app.use(cors());
-app.use(exprees.json());
+app.use(express.json());
+
+
 
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.to6vq.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
@@ -35,38 +31,32 @@ async function run() {
 
           // GET API 
 
-          app.get('/servises', async (req, res) => {
-               const carsor = serviseCllection.find({});
-               const servises = await carsor.toArray();
-               res.send(servises)
+          app.get('/Servises', async (req, res) => {
+               const cursor = serviseCllection.find({});
+               const services = await cursor.toArray();
+               res.send(services);
+
           })
 
 
-
-          app.get('/servises/:id', async (req, res) => {
+          // GET Single Service
+          app.get('/Servises/:id', async (req, res) => {
                const id = req.params.id;
-               console.log('hitting id ', id)
+               console.log('getting specific service', id);
                const query = { _id: ObjectId(id) };
-
-               const allData = await serviseCllection.insertOne(query);
-
-               res.json(allData)
-
+               const service = await serviseCllection.findOne(query);
+               res.json(service);
           })
 
           // POST API 
+          app.post('/Services', async (req, res) => {
+               const service = req.body;
+               console.log('hit the post api', service);
 
-          app.post("/servises", async (req, res) => {
-
-               const servise = req.body
-               console.log("hitting", servise);
-
-               const result = await serviseCllection.insertOne(servise);
-
-               console.log(result)
-
+               const result = await serviseCllection.insertOne(service);
+               console.log(result);
                res.json(result)
-          })
+          });
 
 
           //add order 
