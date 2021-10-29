@@ -1,69 +1,108 @@
-const express = require('express')
-const app = express()
-const port = process.env.PORT || 5000;
+const exprees = require("express");
+
 const { MongoClient } = require('mongodb');
 
-//MiddeleWare
-require('dotenv').config()
-const cors = require("cors")
-app.use(cors());
-app.use(express.json());
+const ObjectId = require("mongodb").ObjectId
 
+const cors = require("cors")
+
+require('dotenv').config()
+
+const app = exprees();
+
+const port = process.env.PORT || 7000;;
+
+
+// cors
+
+app.use(cors());
+app.use(exprees.json());
 
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.to6vq.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
-// console.log(client)
-
-
 async function run() {
+
      try {
           await client.connect();
-          console.log("data base connect successfuly ")
+          // console.log("hi db")
           const database = client.db("Assignment-11");
-          const servisesCollection = database.collection("Servises");
+          const serviseCllection = database.collection("Servises");
           const orderCollection = database.collection("order")
 
-          //GEI API
+
+
+          // GET API 
+
           app.get('/servises', async (req, res) => {
-               const cursor = servisesCollection.find({});
-               products = await cursor.toArray();
-               res.send(products)
-          });
-
-
-
-          // POST api to get kyes \
-
-
-          app.post('/servises/bykeys', async (req, res) => {
-               // console.log(req.body)
-               const keys = req.body
-               const query = { key: { $in: keys } }
-               const products = await productsCllection.find(query).toArray()
-               res.json(products)
+               const carsor = serviseCllection.find({});
+               const servises = await carsor.toArray();
+               res.send(servises)
           })
 
-          app.post('/order', async (req, res) => {
-               const order = req.body
-               const result = await orderCollection.insertOne(order)
+
+
+          app.get('/servises/:id', async (req, res) => {
+               const id = req.params.id;
+               console.log('hitting id ', id)
+               const query = { _id: ObjectId(id) };
+
+               const allData = await serviseCllection.insertOne(query);
+
+               res.json(allData)
+
+          })
+
+          // POST API 
+
+          app.post("/servises", async (req, res) => {
+
+               const servise = req.body
+               console.log("hitting", servise);
+
+               const result = await serviseCllection.insertOne(servise);
+
+               console.log(result)
+
                res.json(result)
           })
 
 
+          //add order 
+          app.post('/order', (req, res) => {
+               // const order = req.body
+               orderCollection.insertOne(req.body).then(result => {
+                    console.log(result)
+               })
+
+
+
+          })
+
+
+          //get my order 
+          app.get('/MyOrder/:email', async (req, res) => {
+               console.log(req.params.email);
+               const order = await orderCollection.find({ email: req.params.email }).toArray()
+               res.send(order);
+          })
      }
      finally {
-
+          // await client.close();
      }
+
 }
-run().catch(console.dir)
 
 
-app.get('/', (req, res) => {
-     res.send('Hello World!')
+run().catch(console.dir);
+
+
+app.get("/", (req, res) => {
+     res.send("hi there")
 })
 
+
 app.listen(port, () => {
-     console.log(`Example app listening at http://localhost:${port}`)
+     console.log("I am in port", port)
 })
