@@ -48,13 +48,14 @@ async function run() {
           // GET Single Service   no
 
 
-          app.get('/Servises/:id', async (req, res) => {
-               const id = req.params.id;
-               const query = { _id: ObjectId(id) };
-               const user = await serviseCllection.findOne(query);
-               // console.log('load user with id: ', id);
-               res.send(user);
-          })
+          app.get("/Servises/:id", (req, res) => {
+               console.log(req.params.id);
+               serviseCllection
+                    .find({ _id: ObjectId(req.params.id) })
+                    .toArray((err, results) => {
+                         res.send(results[0]);
+                    });
+          });
 
           // POST API 
           app.post('/Servises', async (req, res) => {
@@ -72,6 +73,22 @@ async function run() {
                const result = await orderCollection.insertOne(order);
                console.log(result);
                res.json(result)
+          });
+          //update product
+          app.put("/update/:id", async (req, res) => {
+               const id = req.params.id;
+               const updatedName = req.body;
+               const filter = { _id: ObjectId(id) };
+
+               productsCollection
+                    .updateOne(filter, {
+                         $set: {
+                              name: updatedName.name,
+                         },
+                    })
+                    .then((result) => {
+                         res.send(result);
+                    });
           });
 
           // get all order by email query
