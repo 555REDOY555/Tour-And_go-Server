@@ -37,12 +37,6 @@ async function run() {
                res.send(services);
 
           })
-          app.get('/order', async (req, res) => {
-               const cursor = serviseCllection.find({});
-               const services = await cursor.toArray();
-               res.send(services);
-
-          })
 
 
           // GET Single Service   no
@@ -74,9 +68,16 @@ async function run() {
                res.json(result)
           });
 
+          // get all order by email query
 
-          //add order 
-
+          app.get("/myOrders/:email", (req, res) => {
+               console.log(req.params);
+               orderCollection
+                    .find({ email: req.params.email })
+                    .toArray((err, results) => {
+                         res.send(results);
+                    });
+          });
 
           // DELETE API
 
@@ -90,6 +91,15 @@ async function run() {
 
                res.json(result);
           })
+          app.delete("/order/:id", async (req, res) => {
+               console.log(req.params.id);
+
+               orderCollection
+                    .deleteOne({ _id: ObjectId(req.params.id) })
+                    .then((result) => {
+                         res.send(result);
+                    });
+          });
      }
      finally {
           // await client.close();
