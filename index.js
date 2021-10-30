@@ -48,6 +48,14 @@ async function run() {
           // GET Single Service   no
 
 
+          app.get("/order/:id", (req, res) => {
+               console.log(req.params.id);
+               orderCollection
+                    .find({ _id: ObjectId(req.params.id) })
+                    .toArray((err, results) => {
+                         res.send(results[0]);
+                    });
+          });
           app.get("/Servises/:id", (req, res) => {
                console.log(req.params.id);
                serviseCllection
