@@ -37,15 +37,23 @@ async function run() {
                res.send(services);
 
           })
+          app.get('/order', async (req, res) => {
+               const cursor = serviseCllection.find({});
+               const services = await cursor.toArray();
+               res.send(services);
+
+          })
 
 
           // GET Single Service   no
-          app.get('/services/:id', async (req, res) => {
+
+
+          app.get('/Servises/:id', async (req, res) => {
                const id = req.params.id;
-               console.log('getting specific service', id);
                const query = { _id: ObjectId(id) };
-               const service = await serviseCllection.findOne(query);
-               res.json(service);
+               const user = await serviseCllection.findOne(query);
+               // console.log('load user with id: ', id);
+               res.send(user);
           })
 
           // POST API 
@@ -68,49 +76,15 @@ async function run() {
 
 
           //add order 
-          app.post('/Order', (req, res) => {
-               // const order = req.body
 
-               // orderCollection.insertOne(req.body).then((result, err) => {
-               //      if (err) {
-               //           res.send(err)
-               //      }
-               //      else {
-               //           res.send(result)
-               //      }
-               // })
-
-
-
-          })
-          // app.post('/order/:id', (req, res) => {
-          //      // const order = req.body
-
-          //      const id = req.params.id;
-          //      console.log('getting specific service', id);
-          //      const query = { _id: ObjectId(id) };
-          //      const order = await orderCollection.insertOne(query);
-          //      res.json(order);
-
-
-
-          // })
-
-
-          //get my order 
-          app.get('/order/:email', async (req, res) => {
-               console.log(req.params.email);
-               const order = await orderCollection.find({ email: req.params.email }).toArray()
-               res.send(order);
-          })
 
           // DELETE API
 
           app.delete('/Servises/:id', async (req, res) => {
                const id = req.params.id;
-               const query = { _id: ObjectId(id) };
+               const query2 = { _id: ObjectId(id) };
 
-               const result = await serviseCllection.deleteOne(query);
+               const result = await serviseCllection.deleteOne(query2);
 
                console.log('deleting user with id ', result);
 
