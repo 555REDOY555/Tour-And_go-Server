@@ -71,14 +71,14 @@ async function run() {
           app.post('/Order', (req, res) => {
                // const order = req.body
 
-               orderCollection.insertOne(req.body).then((result, err) => {
-                    if (err) {
-                         res.send(err)
-                    }
-                    else {
-                         res.send(result)
-                    }
-               })
+               // orderCollection.insertOne(req.body).then((result, err) => {
+               //      if (err) {
+               //           res.send(err)
+               //      }
+               //      else {
+               //           res.send(result)
+               //      }
+               // })
 
 
 
