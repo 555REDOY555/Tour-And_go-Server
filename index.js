@@ -31,6 +31,12 @@ async function run() {
 
           // GET API 
 
+          app.get('/order', async (req, res) => {
+               const cursor = orderCollection.find({});
+               const order = await cursor.toArray();
+               res.send(order);
+
+          })
           app.get('/Servises', async (req, res) => {
                const cursor = serviseCllection.find({});
                const services = await cursor.toArray();
