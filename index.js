@@ -40,12 +40,12 @@ async function run() {
 
 
           // GET Single Service   no
-          app.get('/Servises/:id', async (req, res) => {
+          app.get('/services/:id', async (req, res) => {
                const id = req.params.id;
                console.log('getting specific service', id);
                const query = { _id: ObjectId(id) };
-               const services = await serviseCllection.findOne(query);
-               res.json(services);
+               const service = await serviseCllection.findOne(query);
+               res.json(service);
           })
 
           // POST API 
@@ -54,6 +54,14 @@ async function run() {
                console.log('hit the post api', Service);
 
                const result = await serviseCllection.insertOne(Service);
+               console.log(result);
+               res.json(result)
+          });
+          app.post('/order', async (req, res) => {
+               const order = req.body;
+               console.log('hit the post api', order);
+
+               const result = await orderCollection.insertOne(order);
                console.log(result);
                res.json(result)
           });
